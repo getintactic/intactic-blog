@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { blogPosts } from '@/lib/admin/api';
-import BlogPostForm from '@/components/admin/BlogPostForm';
+import { BlogPostForm } from '@/components/admin/BlogPostForm';
 
 export default function EditBlogPostPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);

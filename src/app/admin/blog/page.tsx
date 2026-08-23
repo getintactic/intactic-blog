@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { blogPosts } from '@/lib/admin/api';
-import StatusBadge from '@/components/admin/StatusBadge';
+import { StatusBadge } from '@/components/admin/StatusBadge';
 
 export default function BlogListPage() {
   const [posts, setPosts] = useState<any[]>([]);

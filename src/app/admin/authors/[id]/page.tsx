@@ -1,11 +1,11 @@
-'client';
+'use client';
 
 import { use, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { authors } from '@/lib/admin/api';
-import AuthorForm from '@/components/admin/AuthorForm';
+import { AuthorForm } from '@/components/admin/AuthorForm';
 
 export default function EditAuthorPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
