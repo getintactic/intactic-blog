@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
       </head>
-      <body className="min-h-screen flex flex-col bg-white text-zinc-900 antialiased">
+      <body className="min-h-screen flex flex-col bg-[#fafaf9] text-zinc-900 antialiased">
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

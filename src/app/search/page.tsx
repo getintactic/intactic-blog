@@ -2,7 +2,7 @@
 
 import { Suspense, useState, useEffect } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Search, X } from 'lucide-react';
+import { Search, X, FileText } from 'lucide-react';
 import PostCard from '@/components/PostCard';
 
 function SearchContent() {
@@ -32,28 +32,79 @@ function SearchContent() {
     doSearch(query);
   };
 
+  const showResults = initialQuery && !loading;
+  const hasResults = results.length > 0;
+  const noResults = initialQuery && !loading && !hasResults;
+
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 md:py-12">
-      <form onSubmit={handleSubmit} className="relative mb-10">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
-        <input type="text" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search articles..." className="w-full pl-12 pr-12 py-4 text-lg border border-zinc-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white" />
-        {query && (
-          <button type="button" onClick={() => { setQuery(''); setResults([]); router.push('/search'); }} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600">
-            <X className="w-5 h-5" />
-          </button>
-        )}
-      </form>
-      {loading && <p className="text-center text-zinc-400 py-10">Searching...</p>}
-      {!loading && results.length > 0 && (
-        <div>
-          <p className="text-sm text-zinc-400 mb-6">{results.length} result{results.length !== 1 ? 's' : ''} found</p>
-          <div className="grid sm:grid-cols-2 gap-6">{results.map((post: any) => <PostCard key={post.id} post={post} />)}</div>
+    <div className="max-w-2xl mx-auto px-5 sm:px-8 py-12 md:py-20">
+      {/* Search input — centered, pill-shaped */}
+      <div className="mb-14">
+        <h1 className="text-2xl sm:text-3xl font-bold text-zinc-900 text-center mb-6 tracking-tight">
+          Search articles
+        </h1>
+        <form onSubmit={handleSubmit} className="relative">
+          <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400 pointer-events-none" />
+          <input
+            type="text"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="Type to search..."
+            autoFocus
+            className="w-full pl-13 pr-12 py-4 text-[15px] border border-zinc-200 rounded-full bg-white shadow-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all duration-200"
+            style={{ paddingLeft: '3.125rem' }}
+          />
+          {query && (
+            <button
+              type="button"
+              onClick={() => { setQuery(''); setResults([]); router.push('/search'); }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 p-0.5 rounded-full text-zinc-400 hover:text-zinc-600 hover:bg-zinc-100 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          )}
+        </form>
+      </div>
+
+      {/* Loading state */}
+      {loading && (
+        <div className="flex items-center justify-center py-16">
+          <div className="w-6 h-6 border-2 border-zinc-200 border-t-emerald-500 rounded-full animate-spin" />
         </div>
       )}
-      {!loading && initialQuery && results.length === 0 && (
-        <div className="text-center py-20 text-zinc-400">
-          <p className="text-lg">No results found for &quot;{initialQuery}&quot;</p>
-          <p className="text-sm mt-1">Try different keywords.</p>
+
+      {/* Results */}
+      {showResults && hasResults && (
+        <div>
+          <p className="text-sm text-zinc-400 mb-8">
+            {results.length} result{results.length !== 1 ? 's' : ''} found
+          </p>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {results.map((post: any) => <PostCard key={post.id} post={post} />)}
+          </div>
+        </div>
+      )}
+
+      {/* Empty state — no query yet */}
+      {!initialQuery && !loading && (
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-zinc-100 flex items-center justify-center mb-5">
+            <FileText className="w-6 h-6 text-zinc-300" />
+          </div>
+          <p className="text-sm text-zinc-400">Start typing to search across all articles</p>
+        </div>
+      )}
+
+      {/* No results state */}
+      {noResults && (
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-zinc-100 flex items-center justify-center mb-5">
+            <Search className="w-6 h-6 text-zinc-300" />
+          </div>
+          <p className="text-base font-medium text-zinc-600 mb-1">
+            No results for &quot;{initialQuery}&quot;
+          </p>
+          <p className="text-sm text-zinc-400">Try different keywords or check for typos.</p>
         </div>
       )}
     </div>
@@ -62,7 +113,11 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center py-20"><div className="w-8 h-8 border-2 border-zinc-300 border-t-zinc-900 rounded-full animate-spin" /></div>}>
+    <Suspense fallback={
+      <div className="flex items-center justify-center py-20">
+        <div className="w-6 h-6 border-2 border-zinc-200 border-t-emerald-500 rounded-full animate-spin" />
+      </div>
+    }>
       <SearchContent />
     </Suspense>
   );
