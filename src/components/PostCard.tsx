@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Clock, BookOpen } from 'lucide-react';
 
 interface PostCardProps {
   post: {
@@ -27,12 +28,13 @@ function formatDate(dateStr: string) {
 }
 
 export default function PostCard({ post }: PostCardProps) {
-  const authorName = post.authors?.name || 'Unknown';
+  const authorName = post.authors?.name || 'Intactic Team';
   const initials = getInitials(authorName);
+  const catColor = post.blogCategories?.color || '#059669';
 
   return (
     <Link href={`/blog/${post.slug}`} className="group block">
-      <article className="bg-white rounded-2xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-shadow duration-300">
+      <article className="bg-white rounded-2xl overflow-hidden shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] transition-all duration-300 hover:-translate-y-0.5">
         {/* Image */}
         <div className="relative aspect-[16/10] bg-zinc-100 overflow-hidden">
           {post.featuredImage ? (
@@ -44,18 +46,18 @@ export default function PostCard({ post }: PostCardProps) {
               className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <span className="text-5xl font-black text-zinc-200 select-none">I</span>
+            <div className="w-full h-full bg-gradient-to-br from-zinc-100 to-zinc-200 flex items-center justify-center">
+              <BookOpen className="w-10 h-10 text-zinc-300" />
             </div>
           )}
           {/* Gradient overlay */}
           <div className="post-card-image absolute inset-0" />
 
-          {/* Category badge on image */}
+          {/* Category badge */}
           {post.blogCategories && (
             <span
-              className="absolute bottom-3 left-3 z-10 px-3 py-1 text-[11px] font-semibold text-white rounded-full tracking-wide"
-              style={{ backgroundColor: post.blogCategories.color || '#059669' }}
+              className="absolute top-3 left-3 z-10 px-3 py-1 text-[11px] font-semibold text-white rounded-lg tracking-wide backdrop-blur-sm"
+              style={{ backgroundColor: `${catColor}dd` }}
             >
               {post.blogCategories.name}
             </span>
@@ -72,25 +74,26 @@ export default function PostCard({ post }: PostCardProps) {
           </p>
 
           {/* Meta row */}
-          <div className="flex items-center gap-2.5 text-[13px]">
-            {/* Avatar circle */}
-            <div className="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center text-[11px] font-bold select-none">
-              {initials}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2.5 text-[13px]">
+              <div
+                className="flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold text-white select-none"
+                style={{ backgroundColor: catColor }}
+              >
+                {initials}
+              </div>
+              <div className="flex flex-col">
+                <span className="font-medium text-zinc-800 text-[13px] leading-tight">{authorName}</span>
+                {post.publishedAt && (
+                  <span className="text-zinc-400 text-[11px]">{formatDate(post.publishedAt)}</span>
+                )}
+              </div>
             </div>
-            <span className="font-medium text-zinc-700 truncate max-w-[140px]">
-              {authorName}
-            </span>
-            <span className="text-zinc-300">·</span>
-            {post.publishedAt && (
-              <time className="text-zinc-400 whitespace-nowrap" dateTime={post.publishedAt}>
-                {formatDate(post.publishedAt)}
-              </time>
-            )}
             {post.readTime && (
-              <>
-                <span className="text-zinc-300">·</span>
-                <span className="text-zinc-400 whitespace-nowrap">{post.readTime}</span>
-              </>
+              <span className="text-[11px] text-zinc-400 flex items-center gap-1">
+                <Clock className="w-3 h-3" />
+                {post.readTime.replace(' min read', '')}
+              </span>
             )}
           </div>
         </div>

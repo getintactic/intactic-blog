@@ -6,10 +6,20 @@ import Footer from '@/components/Footer';
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 
 export const metadata: Metadata = {
-  title: { default: 'Intactic Insights | Tech Blog', template: '%s | Intactic Insights' },
+  title: { default: 'Intactic Insights | Engineering Blog', template: '%s | Intactic Insights' },
   description: 'Deep dives into software engineering, AI, cloud, and cybersecurity by the Intactic team.',
   metadataBase: new URL('https://ins.intactic.net'),
-  openGraph: { type: 'website', siteName: 'Intactic Insights' },
+  openGraph: {
+    type: 'website',
+    siteName: 'Intactic Insights',
+    title: 'Intactic Insights | Engineering Blog',
+    description: 'Deep dives into software engineering, AI, cloud, and cybersecurity by the Intactic team.',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Intactic Insights | Engineering Blog',
+    description: 'Deep dives into software engineering, AI, cloud, and cybersecurity by the Intactic team.',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
